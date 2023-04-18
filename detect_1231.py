@@ -188,12 +188,12 @@ def lambda_handler(event, context):
             'body': ret
         }
 
-if __name__ == '__main__':
-    from pathlib import Path
-    ff = Path('sample/a.png').read_bytes()
-    b64str = base64.b64encode(ff)
-
-    ret = create(b64str)
-
-    for i in range(len(ret)):
-        print(*ret[i])
+#if __name__ == '__main__':
+#    from pathlib import Path
+#    ff = Path('sample/a.png').read_bytes()
+#    b64str = base64.b64encode(ff)
+#
+#    ret = create(b64str)
+#
+#    for i in range(len(ret)):
+#        print(*ret[i])
