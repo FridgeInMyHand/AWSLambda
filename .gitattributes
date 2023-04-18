@@ -1,0 +1,4 @@
+# remove notebooks from GitHub language stats
+*.ipynb linguist-vendored
+.pt filter=lfs diff=lfs merge=lfs -text
+weights/best_403food_e200b150v2.pt filter=lfs diff=lfs merge=lfs -text

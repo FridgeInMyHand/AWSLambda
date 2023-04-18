@@ -1,0 +1,10 @@
+sample\a.png,15011002,F
+sample\a.png,15011002,F
+sample\a.png,15011017,F
+sample\a.png,15011002,F
+sample\a.png,15011017,F
+sample\a.png,15011017,F
+sample\a.png,15011002,F
+sample\a.png,15011017,F
+sample\a.png,15011017,F
+sample\a.png,00000000,N
