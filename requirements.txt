@@ -10,6 +10,7 @@ tqdm>=4.41.0
 boto3
 flask==2.3.1
 flask_restx==1.1.0
+opencv-python
 
 # coco ----------------------------------------
 # pycocotools>=2.0
