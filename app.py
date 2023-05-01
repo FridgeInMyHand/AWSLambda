@@ -8,6 +8,7 @@ import numpy as np
 import cv2
 from flask import Flask, request  # 서버 구현을 위한 Flask 객체 import
 from flask_restx import Api, Resource  # Api 구현을 위한 Api 객체 import
+import json
 app = Flask(__name__)  # Flask 객체 선언, 파라미터로 어플리케이션 패키지의 이름을 넣어줌.
 api = Api(app)  # Flask 객체에 Api 객체 등록
 
@@ -185,7 +186,19 @@ class HelloWorld(Resource):
         try:
 
             data = request.stream.read()
-            return create(opt, data)
+            ret = create(opt, data)[0]
+
+            lst = list()
+
+            for i in range(len(ret)):
+                dict = {
+                    "idx": ret[i][0],
+                    "data": ret[i][1]
+                }
+
+                lst.append(dict)
+
+            return lst
         except Exception as e:
             return {"error": str(e)}
 
