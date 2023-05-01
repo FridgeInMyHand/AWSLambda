@@ -6,8 +6,10 @@ from utils.datasets import *
 from utils.utils import *
 import numpy as np
 import cv2
-import json
-import base64
+from flask import Flask, request  # 서버 구현을 위한 Flask 객체 import
+from flask_restx import Api, Resource  # Api 구현을 위한 Api 객체 import
+app = Flask(__name__)  # Flask 객체 선언, 파라미터로 어플리케이션 패키지의 이름을 넣어줌.
+api = Api(app)  # Flask 객체에 Api 객체 등록
 
 def indent(elem, level=0):  #
     i = "\n" + level * "  "
@@ -143,7 +145,7 @@ def detect(opt, buf, save_img=False):
     return ret
 
 
-def create(b64str):
+def init():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cfg', type=str, default='cfg/yolov3-spp-403cls.cfg', help='*.cfg path')
     parser.add_argument('--names', type=str, default='data/403food.names', help='*.names path')
@@ -167,27 +169,31 @@ def create(b64str):
     opt.names = check_file(opt.names)  # check file
     print(len(os.listdir(opt.source)))
 
-    data = base64.b64decode(b64str)
+    return opt
+
+def create(opt, data):
+
+
     with torch.no_grad():
         return detect(opt, data)
 
-def lambda_handler(event, context):
+opt = init()
 
-    data = json.loads(event['body'])["img"]
-    ret = create(data)
+@api.route('/detect', methods=['POST'])  # 데코레이터 이용, '/hello' 경로에 클래스 등록
+class HelloWorld(Resource):
+    def post(self):  # GET 요청시 리턴 값에 해당 하는 dict를 JSON 형태로 반환
+        try:
 
-    return {
-            'headers': { "Content-Type": "text/json" },
-            'statusCode': 200,
-            'body': ret
-        }
+            data = request.stream.read()
+            return create(opt, data)
+        except Exception as e:
+            return {"error": str(e)}
 
-#if __name__ == '__main__':
-#    from pathlib import Path
-#    ff = Path('sample/a.png').read_bytes()
-#    b64str = base64.b64encode(ff)
-#
-#    ret = create(b64str)
-#
-#    for i in range(len(ret)):
-#        print(*ret[i])
+if __name__ == '__main__':
+
+
+    #ret = create(opt, ff)
+    #for i in range(len(ret)):
+    #    print(*ret[i])
+    print('OK')
+    app.run(debug=True, host='0.0.0.0', port=8080)
